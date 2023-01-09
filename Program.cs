@@ -10,6 +10,7 @@
 //
 // Define the dimensions of the maze
 using System.Security.Cryptography;
+using System.Threading.Tasks.Dataflow;
 
 bool hasWon = false;
 const int palyaSorok = 20;
@@ -60,10 +61,7 @@ while (!hasWon)
     {
     // Clear the console before each frame
     Console.Clear();
-    int countRoom = 0;
-    int countEnd = 0;
-    Console.WriteLine(countEnd);
-    Console.WriteLine(countRoom);
+
 
     if (nyelvValaszto == 2)
     {
@@ -121,7 +119,33 @@ while (!hasWon)
             Console.WriteLine();
         }
 
+    char ends = '═';
+    int countEnd = 0;
+    char rooms = '█';
+    int countRoom = 0;
 
+    for (int i = 0; i < maze.GetLength(0); i++)
+    {
+        for (int j = 0; j < maze.GetLength(1); j++)
+        {
+            if (maze[i, j] == ends)
+            {
+                countEnd++;
+            }
+        }
+    }
+    for (int i = 0; i < maze.GetLength(0); i++)
+    {
+        for (int j = 0; j < maze.GetLength(1); j++)
+        {
+            if (maze[i, j] == rooms)
+            {
+                countRoom++;
+            }
+        }
+    }
+
+    
     if (countRoom == 0 && countEnd == 0)
     {
         if (nyelvValaszto == 2)
@@ -163,13 +187,14 @@ while (!hasWon)
     {
         if (nyelvValaszto == 2)
         {
-            Console.WriteLine("Most teljesithető a pálya");
+            Console.WriteLine(countRoom+"db szoba van a pályán");
         }
         else if (nyelvValaszto == 1)
         {
-            Console.WriteLine("The maze is doable");
+            Console.WriteLine("There are as many room(s) as "+ countRoom);
         }
     }
+    
         // Check if the player has reached the end of the maze
         if (jatekosKezdoSor == endRow && jatekosKezdoOszlop == endColumn)
     {
