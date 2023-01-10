@@ -1,14 +1,12 @@
 ﻿//'╬','═','╦','╩','║','╣','╠','╗','╝','╚', '╔'
-//Kell egy ellenörző hogy van e a pályán szoba és van e kijárat és bejárat
 //Functionba kell rakni :((
 //Le kell tudni menteni a térképet
-//Megoldani vhogy hogy be lehessen fejezni
 //Hozzá adni hogy időre menjen
 
 //Be lehet tölteni és szerkeszteni régi térképeket
 //El lehet nevezni a mentett térképet
 //
-// Define the dimensions of the maze
+
 using System.Security.Cryptography;
 using System.Threading.Tasks.Dataflow;
 
@@ -194,12 +192,18 @@ while (!hasWon)
             Console.WriteLine("There are as many room(s) as "+ countRoom);
         }
     }
-    
-        // Check if the player has reached the end of the maze
-        if (jatekosKezdoSor == endRow && jatekosKezdoOszlop == endColumn)
+    hasWon = false;
+    // Check if the player has reached the end of the maze
+    if (hasWon == true)
     {
-        // If so, the player has won the game
-        hasWon = true;
+        if (nyelvValaszto==2)
+        {
+            Console.WriteLine("Befejezte a labititus szerkesztést(nyomjon meg kettő gombot a prgram bezárásához)");
+        }
+        else if (nyelvValaszto ==1)
+        {
+            Console.WriteLine("You are finished the the editing(press two buttons to close the code)");
+        }
     }
     else
     {
@@ -259,6 +263,9 @@ while (!hasWon)
                 break;
             case ConsoleKey.R:
                 instructions = "drawARoom";
+                break;
+            case ConsoleKey.End:
+                instructions = "endTheEditing";
                 break;
         }
 
@@ -433,6 +440,9 @@ while (!hasWon)
                     }
                 }
                 break;
+            case "endTheEditing":
+                hasWon = true;
+            break;
         }
         foreach (char data in maze)
         {
