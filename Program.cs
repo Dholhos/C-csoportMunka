@@ -55,6 +55,7 @@ const int palyaOszlopok = 20;
 // Continue running the game until the player has won or quits
 Console.WriteLine("Kérem válasszon nyelvet Angol(1) vagy Magyar(2)");
 double nyelvValaszto = Convert.ToDouble(Console.ReadLine());
+
 while (!hasWon)
     {
     // Clear the console before each frame
@@ -63,38 +64,41 @@ while (!hasWon)
 
     if (nyelvValaszto == 2)
     {
-        Console.WriteLine("A nyílak lenyomásával tud mozogni");
-        Console.WriteLine("Az f1 gomb lenyomásával tud rajzolni '╬' karaktert");
-        Console.WriteLine("Az f2 gomb lenyomásával tud rajzolni '═' karaktert");
-        Console.WriteLine("Az f3 gomb lenyomásával tud rajzolni '╦' karaktert");
-        Console.WriteLine("Az f4 gomb lenyomásával tud rajzolni '╩' karaktert");
-        Console.WriteLine("Az f5 gomb lenyomásával tud rajzolni '║' karaktert");
-        Console.WriteLine("Az f6 gomb lenyomásával tud rajzolni '╣' karaktert");
-        Console.WriteLine("Az f7 gomb lenyomásával tud rajzolni '╠' karaktert");
-        Console.WriteLine("Az f8 gomb lenyomásával tud rajzolni '╗' karaktert");
-        Console.WriteLine("Az f9 gomb lenyomásával tud rajzolni '╝' karaktert");
-        Console.WriteLine("Az f10 gomb lenyomásával tud rajzolni '╚' karaktert");
-        Console.WriteLine("Az f12 gomb lenyomásával tud rajzolni '╔' karaktert");
-        Console.WriteLine("Az space gomb lenyomásával tud rajzolni ',' karaktert");
-        Console.WriteLine("Az 'R' gomb lenyomásával tud rajzolni '█' karaktert");
-        
+        Console.WriteLine("A nyílak lenyomásával tud mozogni.");
+        Console.WriteLine("Az f1 gomb lenyomásával tud rajzolni '╬' karaktert.");
+        Console.WriteLine("Az f2 gomb lenyomásával tud rajzolni '═' karaktert.");
+        Console.WriteLine("Az f3 gomb lenyomásával tud rajzolni '╦' karaktert.");
+        Console.WriteLine("Az f4 gomb lenyomásával tud rajzolni '╩' karaktert.");
+        Console.WriteLine("Az f5 gomb lenyomásával tud rajzolni '║' karaktert.");
+        Console.WriteLine("Az f6 gomb lenyomásával tud rajzolni '╣' karaktert.");
+        Console.WriteLine("Az f7 gomb lenyomásával tud rajzolni '╠' karaktert.");
+        Console.WriteLine("Az f8 gomb lenyomásával tud rajzolni '╗' karaktert.");
+        Console.WriteLine("Az f9 gomb lenyomásával tud rajzolni '╝' karaktert.");
+        Console.WriteLine("Az f10 gomb lenyomásával tud rajzolni '╚' karaktert.");
+        Console.WriteLine("Az f12 gomb lenyomásával tud rajzolni '╔' karaktert.");
+        Console.WriteLine("Az space gomb lenyomásával tud rajzolni ',' karaktert.");
+        Console.WriteLine("Az 'R' gomb lenyomásával tud rajzolni '█' karaktert.");
+        Console.WriteLine("Az 'Home' gomb lenyomásával tudja lementeni a labitintust.");
+        Console.WriteLine("Az 'End' gomb lenyomásával tudja abba hagyni a labirintus szerkesztését.");
     }
     else if (nyelvValaszto == 1)
     {
-        Console.WriteLine("You can move with the arrow bottuns");
-        Console.WriteLine("The f1 key is drawing a '╬' shape");
-        Console.WriteLine("The f2 key is drawing a '═' shape");
-        Console.WriteLine("The f3 key is drawing a '╦' shape");
-        Console.WriteLine("The f4 key is drawing a '╩' shape");
-        Console.WriteLine("The f5 key is drawing a '║' shape");
-        Console.WriteLine("The f6 key is drawing a '╣' shape");
-        Console.WriteLine("The f7 key is drawing a '╠' shape");
-        Console.WriteLine("The f8 key is drawing a '╗' shape");
-        Console.WriteLine("The f9 key is drawing a'╝' shape");
-        Console.WriteLine("The f10 key is drawing a '╚' shape");
-        Console.WriteLine("The f12 key is drawing a '╔' shape");
-        Console.WriteLine("The space key is drawing a ',' shape");
-        Console.WriteLine("The 'R' key is drawing a '█' shape");
+        Console.WriteLine("You can move with the arrow bottuns.");
+        Console.WriteLine("The f1 key is drawing a '╬' shape.");
+        Console.WriteLine("The f2 key is drawing a '═' shape.");
+        Console.WriteLine("The f3 key is drawing a '╦' shape.");
+        Console.WriteLine("The f4 key is drawing a '╩' shape.");
+        Console.WriteLine("The f5 key is drawing a '║' shape.");
+        Console.WriteLine("The f6 key is drawing a '╣' shape.");
+        Console.WriteLine("The f7 key is drawing a '╠' shape.");
+        Console.WriteLine("The f8 key is drawing a '╗' shape.");
+        Console.WriteLine("The f9 key is drawing a'╝' shape.");
+        Console.WriteLine("The f10 key is drawing a '╚' shape.");
+        Console.WriteLine("The f12 key is drawing a '╔' shape.");
+        Console.WriteLine("The space key is drawing a ',' shape.");
+        Console.WriteLine("The 'R' key is drawing a '█' shape.");
+        Console.WriteLine("The 'Home' key is saveing the maze.");
+        Console.WriteLine("You can stop the editing if you press the 'end' button.");
     }
 
     // Draw the maze to the console
@@ -194,18 +198,8 @@ while (!hasWon)
     }
     hasWon = false;
     // Check if the player has reached the end of the maze
-    if (hasWon == true)
-    {
-        if (nyelvValaszto==2)
-        {
-            Console.WriteLine("Befejezte a labititus szerkesztést(nyomjon meg kettő gombot a prgram bezárásához)");
-        }
-        else if (nyelvValaszto ==1)
-        {
-            Console.WriteLine("You are finished the the editing(press two buttons to close the code)");
-        }
-    }
-    else
+
+    if (!hasWon)     
     {
         // Get the player's input for the next move
         ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -266,6 +260,9 @@ while (!hasWon)
                 break;
             case ConsoleKey.End:
                 instructions = "endTheEditing";
+                break;
+            case ConsoleKey.Home:
+                instructions = "saveTheFile";
                 break;
         }
 
@@ -443,6 +440,18 @@ while (!hasWon)
             case "endTheEditing":
                 hasWon = true;
             break;
+            case "saveTheFile":
+                string matrixText = "";
+                for (int i = 0; i < maze.GetLength(0); i++)
+                {
+                    for (int j = 0; j < maze.GetLength(1); j++)
+                    {
+                        matrixText += maze[i, j] + ",";
+                    }
+                    matrixText = matrixText.Remove(matrixText.Length - 1) + Environment.NewLine;
+                }
+                File.WriteAllText("maze.txt", matrixText);
+                break;
         }
         foreach (char data in maze)
         {
@@ -458,14 +467,17 @@ while (!hasWon)
     }
     
 }
-
-
-    // Display a message to the player if they have won the game
-    if (hasWon)
+if (hasWon == true)
+{
+    if (nyelvValaszto == 2)
     {
-        Console.WriteLine("Congratulations! You have reached the end of the maze!");
+        Console.WriteLine("Befejezte a labititus szerkesztést(nyomjon le egy gombot a prgram bezárásához)");
     }
+    else if (nyelvValaszto == 1)
+    {
+        Console.WriteLine("You are finished the the editing(press a buttons to close the code)");
+    }
+}
 
-    // Wait for the player to press a key before closing the game
-    Console.ReadKey();
+
 
