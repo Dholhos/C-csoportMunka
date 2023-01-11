@@ -6,7 +6,9 @@
 //Be lehet tölteni és szerkeszteni régi térképeket
 //El lehet nevezni a mentett térképet
 //
-
+using System;
+using System.Data.Common;
+using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks.Dataflow;
 
@@ -42,10 +44,6 @@ const int palyaOszlopok = 20;
     int jatekosKezdoSor = 0;
     int jatekosKezdoOszlop = 0;
 
-    // Set the position of the end of the maze
-    int endRow = 9;
-    int endColumn = 19;
-
     // Set the initial direction for the player's movement
     string instructions = "down";
 
@@ -64,7 +62,10 @@ while (!hasWon)
 
     if (nyelvValaszto == 2)
     {
-        Console.WriteLine("A nyílak lenyomásával tud mozogni.");
+        Console.WriteLine("A 'W' gombok lenyomásával tud  felfelé mozogni.");
+        Console.WriteLine("A 'S' gombok lenyomásával tud hátrafelé mozogni.");
+        Console.WriteLine("A 'A' gombok lenyomásával tud balra mozogni.");
+        Console.WriteLine("A 'D' gombok lenyomásával tud jobbra mozogni.");
         Console.WriteLine("Az f1 gomb lenyomásával tud rajzolni '╬' karaktert.");
         Console.WriteLine("Az f2 gomb lenyomásával tud rajzolni '═' karaktert.");
         Console.WriteLine("Az f3 gomb lenyomásával tud rajzolni '╦' karaktert.");
@@ -78,12 +79,15 @@ while (!hasWon)
         Console.WriteLine("Az f12 gomb lenyomásával tud rajzolni '╔' karaktert.");
         Console.WriteLine("Az space gomb lenyomásával tud rajzolni ',' karaktert.");
         Console.WriteLine("Az 'R' gomb lenyomásával tud rajzolni '█' karaktert.");
-        Console.WriteLine("Az 'Home' gomb lenyomásával tudja lementeni a labitintust.");
+       // Console.WriteLine("Az 'Home' gomb lenyomásával tudja lementeni a labitintust.");
         Console.WriteLine("Az 'End' gomb lenyomásával tudja abba hagyni a labirintus szerkesztését.");
     }
     else if (nyelvValaszto == 1)
     {
-        Console.WriteLine("You can move with the arrow bottuns.");
+        Console.WriteLine("You can move forward with 'W' button.");
+        Console.WriteLine("You can move backwards with 'S' button.");
+        Console.WriteLine("You can move left with 'A' button.");
+        Console.WriteLine("You can move right with 'D' button.");
         Console.WriteLine("The f1 key is drawing a '╬' shape.");
         Console.WriteLine("The f2 key is drawing a '═' shape.");
         Console.WriteLine("The f3 key is drawing a '╦' shape.");
@@ -97,7 +101,7 @@ while (!hasWon)
         Console.WriteLine("The f12 key is drawing a '╔' shape.");
         Console.WriteLine("The space key is drawing a ',' shape.");
         Console.WriteLine("The 'R' key is drawing a '█' shape.");
-        Console.WriteLine("The 'Home' key is saveing the maze.");
+       // Console.WriteLine("The 'Home' key is saveing the maze.");
         Console.WriteLine("You can stop the editing if you press the 'end' button.");
     }
 
@@ -126,11 +130,12 @@ while (!hasWon)
     char rooms = '█';
     int countRoom = 0;
 
+
     for (int i = 0; i < maze.GetLength(0); i++)
     {
         for (int j = 0; j < maze.GetLength(1); j++)
         {
-            if (maze[i, j] == ends)
+            if (maze[i, j] == rooms)
             {
                 countEnd++;
             }
@@ -146,19 +151,17 @@ while (!hasWon)
             }
         }
     }
-
     
-    if (countRoom == 0 && countEnd == 0)
+    
+    if (countRoom >= 1 && countEnd == 2)
     {
         if (nyelvValaszto == 2)
         {
-            Console.WriteLine("Még nincsen terem létrehozva ezen a pályán.");
-            Console.WriteLine("Még nincsen se kijárat, se bejárat létrehozva ezen a pályán.");
+            Console.WriteLine(countRoom + "db szoba van a pályán");
         }
         else if (nyelvValaszto == 1)
         {
-            Console.WriteLine("There are no room in the maze.");
-            Console.WriteLine("There are no exit and no start at the maze yet.");
+            Console.WriteLine("There are as many room(s) as " + countRoom);
         }
     }
     else if (countRoom == 0 && countEnd == 1)
@@ -189,11 +192,13 @@ while (!hasWon)
     {
         if (nyelvValaszto == 2)
         {
-            Console.WriteLine(countRoom+"db szoba van a pályán");
+            Console.WriteLine("Még nincsen terem létrehozva ezen a pályán.");
+            Console.WriteLine("Még nincsen se kijárat, se bejárat létrehozva ezen a pályán.");
         }
         else if (nyelvValaszto == 1)
         {
-            Console.WriteLine("There are as many room(s) as "+ countRoom);
+            Console.WriteLine("There are no room in the maze.");
+            Console.WriteLine("There are no exit and no start at the maze yet.");
         }
     }
     hasWon = false;
@@ -441,29 +446,41 @@ while (!hasWon)
                 hasWon = true;
             break;
             case "saveTheFile":
-                string matrixText = "";
-                for (int i = 0; i < maze.GetLength(0); i++)
+                using (StreamWriter sw = new StreamWriter("maze.txt"))
                 {
-                    for (int j = 0; j < maze.GetLength(1); j++)
+                    for (int i = 0; i < maze.GetLength(0); i++)
                     {
-                        matrixText += maze[i, j] + ",";
+                        for (int j = 0; j < maze.GetLength(1); j++)
+                        {
+                            sw.Write(maze[i, j] + " ");
+                        }
+                        sw.WriteLine();
                     }
-                    matrixText = matrixText.Remove(matrixText.Length - 1) + Environment.NewLine;
                 }
-                File.WriteAllText("maze.txt", matrixText);
-                break;
+                    break;
         }
-        foreach (char data in maze)
+        /*
+        int rows = maze.GetLength(0);
+        int columns = maze.GetLength(1);
+        char value = '=';
+        for (int i = 0; i < rows; i++)
         {
-            if (data == '=')
+            if (maze[i, 0] == value || maze[i, columns - 1] == value)
             {
                 countEnd++;
             }
-            else if (data == '█')
+        }
+        */
+
+       
+        foreach (char data in maze)
+        {
+             if (data == '█')
             {
                 countRoom++;
             }
         }
+        
     }
     
 }
