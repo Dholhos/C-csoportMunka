@@ -79,8 +79,10 @@ while (!hasWon)
         Console.WriteLine("Az f12 gomb lenyomásával tud rajzolni '╔' karaktert.");
         Console.WriteLine("Az space gomb lenyomásával tud rajzolni ',' karaktert.");
         Console.WriteLine("Az 'R' gomb lenyomásával tud rajzolni '█' karaktert.");
-       // Console.WriteLine("Az 'Home' gomb lenyomásával tudja lementeni a labitintust.");
         Console.WriteLine("Az 'End' gomb lenyomásával tudja abba hagyni a labirintus szerkesztését.");
+        // Console.WriteLine("Az 'Home' gomb lenyomásával tudja lementeni a labitintust.");
+        // Console.WriteLine("A 'L' gomb segitségével lehet betölteni meglévő állományt");
+        // Console.WriteLine("A 'T' gomb segitségével lehet időzitőt adni a pályához");
     }
     else if (nyelvValaszto == 1)
     {
@@ -101,8 +103,10 @@ while (!hasWon)
         Console.WriteLine("The f12 key is drawing a '╔' shape.");
         Console.WriteLine("The space key is drawing a ',' shape.");
         Console.WriteLine("The 'R' key is drawing a '█' shape.");
-       // Console.WriteLine("The 'Home' key is saveing the maze.");
         Console.WriteLine("You can stop the editing if you press the 'end' button.");
+        // Console.WriteLine("The 'Home' key is saveing the maze.");
+        // Console.WriteLine("The 'L' is load an existing file");
+        // Console.WriteLine("The 'T' is add a timer to the maze");
     }
 
     // Draw the maze to the console
@@ -268,6 +272,12 @@ while (!hasWon)
                 break;
             case ConsoleKey.Home:
                 instructions = "saveTheFile";
+                break;
+            case ConsoleKey.L:
+                instructions = "loadTheFile";
+                break;
+            case ConsoleKey.T:
+                instructions = "addTimer";
                 break;
         }
 
@@ -444,35 +454,21 @@ while (!hasWon)
                 break;
             case "endTheEditing":
                 hasWon = true;
-            break;
+                break;
             case "saveTheFile":
-                using (StreamWriter sw = new StreamWriter("maze.txt"))
-                {
-                    for (int i = 0; i < maze.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < maze.GetLength(1); j++)
-                        {
-                            sw.Write(maze[i, j] + " ");
-                        }
-                        sw.WriteLine();
-                    }
-                }
-                    break;
-        }
-        /*
-        int rows = maze.GetLength(0);
-        int columns = maze.GetLength(1);
-        char value = '=';
-        for (int i = 0; i < rows; i++)
-        {
-            if (maze[i, 0] == value || maze[i, columns - 1] == value)
-            {
-                countEnd++;
-            }
-        }
-        */
-
-       
+                Console.Write("\nKérem a labirintus elérési útját és fájlnevét! :");
+                string mazeName = Console.ReadLine();
+                MentTerkepet(maze, mazeName);
+                break;
+            case "loadTheFile":
+                Console.Write("\nKérem a labirintus elérési útját és fájlnevét! :");
+                maze = BetoltTerkepet(Console.ReadLine());
+                break;
+                /*
+            case "addTimer":
+                break;
+                */
+        }            
         foreach (char data in maze)
         {
              if (data == '█')
@@ -496,5 +492,33 @@ if (hasWon == true)
     }
 }
 
+static void MentTerkepet(char[,] palya, string palyaNeve)
+{
+    string[] sorok = new string[palya.GetLength(0)];
+    //todo  6.feladat: Nem működik a kilépés menü! Mi lehet a gond? Módosítsa a kódot!
+    string sor = "";
+    for (int sorIndex = 0; sorIndex < palya.GetLength(0); sorIndex++)
+    {
+        for (int oszlopIndexe = 0; oszlopIndexe < palya.GetLength(1); oszlopIndexe++)
+        {
+            sor += palya[sorIndex, oszlopIndexe];
+        }
+        sorok[sorIndex] = sor;
+        sor = "";
+    }
+    File.WriteAllLines(palyaNeve, sorok); //A string tömböt írja ki a fájlba
+}
 
-
+static char[,] BetoltTerkepet(string palyaNeve)
+{
+    string[] sorok = File.ReadAllLines(palyaNeve);
+    char[,] palya = new char[sorok.Length, sorok[0].Length];
+    for (int sorIndex = 0; sorIndex < palya.GetLength(0); sorIndex++)
+    {
+        for (int oszlopIndexe = 0; oszlopIndexe < palya.GetLength(1); oszlopIndexe++)
+        {
+            palya[sorIndex, oszlopIndexe] = sorok[sorIndex][oszlopIndexe];
+        }
+    }
+    return palya;
+}
